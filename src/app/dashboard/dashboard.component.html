@@ -1,0 +1,8 @@
+<p>
+  dashboard works!
+  <button (click)="onLogout()">logout</button>
+</p>
+Token {{token}}
+<ul *ngFor="let entry of registrations.edges">
+    Score: {{entry.node.title}}
+  </ul>
