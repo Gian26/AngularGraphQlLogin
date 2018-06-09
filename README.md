@@ -1,5 +1,5 @@
-<<<<<<< HEAD
-# GraphqlLogin
+# AngularGraphQlLogin
+Angular 5 using apollo graphql for a login  app
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.5.6.
 
@@ -26,7 +26,10 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
-=======
-# AngularGraphQlLogin
-Angular 5 using apollo graphql for a login  app
->>>>>>> 429c57badc08bb27147aeaacea8ddca48a9bf0af
+
+
+<!--  
+Not done
+need to change queries with according variables
+refresh service of token every 5 mins
+-->
