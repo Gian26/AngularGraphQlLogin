@@ -23,7 +23,7 @@ export class GraphQLModule {
     const http = httpLink.create({uri: "//localhost:8000/graphql/"});
     const authMiddleware = setContext((_, { headers }) => {
       // get the authentication token from local storage if it exists
-      const token = localStorage.getItem('tokenCarpintaria');
+      const token = localStorage.getItem('tokenApp');
       if (!token) {
         console.log("no token");
         return {};

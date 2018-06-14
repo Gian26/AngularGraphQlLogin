@@ -30,7 +30,7 @@ const FeedQuery = gql`
 export class DashboardComponent implements OnInit {
 
   registrations: Array<any> = [];
-  token = localStorage.getItem('tokenCarpintaria');
+  token = localStorage.getItem('tokenApp');
   constructor(private apollo: Apollo,private authService:AuthenticationService) {}
 
   ngOnInit() {

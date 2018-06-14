@@ -9,7 +9,7 @@ import { AuthenticationService } from '../auth/authentication.service';
 export class RedirectLoginService implements CanActivate {
   constructor(private auth: AuthenticationService, private router: Router) {}
   canActivate(): boolean {
-    if (localStorage.getItem('tokenCarpintaria')) {
+    if (localStorage.getItem('tokenApp')) {
       this.router.navigateByUrl('/dashboard');
       return false;
     }

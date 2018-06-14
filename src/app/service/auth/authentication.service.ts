@@ -12,8 +12,8 @@ import 'rxjs/add/operator/map';
 import { User } from '../../models/user';
 
 const userMutationLogin = gql`
-  mutation{
-    tokenAuth(username:"marcacarpintaria",password:"content2018") {
+  mutation requestLogin($username:String!,$password:String!){
+    tokenAuth(username:$username,password:$password) {
       token
     }
   }
@@ -26,15 +26,19 @@ export class AuthenticationService {
   constructor(private apollo:Apollo, private router: Router) { }
 
   login(user:User):void{
+
     this.apollo
       .mutate(
       {
         mutation: userMutationLogin,
-
+        variables: {
+            username: user.email,
+            password: user.password
+          }
        })
        .subscribe(res=>{
 
-        localStorage.setItem('tokenCarpintaria', res.data.tokenAuth.token);
+        localStorage.setItem('tokenApp', res.data.tokenAuth.token);
         console.log(res.data.tokenAuth.token);
         this.router.navigateByUrl('/dashboard');
 
@@ -42,7 +46,7 @@ export class AuthenticationService {
   }
 
   logout():void{
-    localStorage.removeItem('tokenCarpintaria');
+    localStorage.removeItem('tokenApp');
     this.router.navigateByUrl('/login');
   }
 
