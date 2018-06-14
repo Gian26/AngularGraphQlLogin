@@ -37,16 +37,15 @@ export class AuthenticationService {
           }
        })
        .subscribe(res=>{
-
         localStorage.setItem('tokenApp', res.data.tokenAuth.token);
         console.log(res.data.tokenAuth.token);
         this.router.navigateByUrl('/dashboard');
-
        });
   }
 
   logout():void{
     localStorage.removeItem('tokenApp');
+    this.apollo.use("carpAdmin").getClient().resetStore();
     this.router.navigateByUrl('/login');
   }
 
@@ -56,15 +55,15 @@ export class AuthenticationService {
       .mutate(
       {
         mutation: gql`
-        mutation{
-
-            verifyToken(token:"adsf"){
+        mutation verifyToken($token:String!){
+            verifyToken(token:$token){
               payload
-
             }
          }
         `,
-
+        variables: {
+            token: localStorage.getItem('tokenApp'),
+          }
        })
        .subscribe(res=>{
 
@@ -73,13 +72,7 @@ export class AuthenticationService {
           return true;
         }
         return false;
-        // localStorage.setItem('tokenCarpintaria', );
-        // console.log(res.data.tokenAuth.token);
-        // this.router.navigateByUrl('/dashboard');
-
        });
-
-    // return moment().isBefore(this.getExpiration());
   }
 
   isLoggedOut() {
@@ -90,5 +83,30 @@ export class AuthenticationService {
     const expiration = localStorage.getItem("expires_at");
     const expiresAt = JSON.parse(expiration);
     // return moment(expiresAt);
+  }
+
+  updateToken(){
+    this.apollo
+      .mutate(
+      {
+        mutation: gql`
+        mutation refreshToken($token:String!){
+            refreshToken(token:$token){
+              token
+            }
+         }
+        `,
+        variables: {
+            token: localStorage.getItem('tokenApp'),
+          }
+       })
+       .subscribe(res=>{
+
+        if(res.data.verifyToken){
+          console.log('working');
+          return true;
+        }
+        return false;
+       });
   }
 }

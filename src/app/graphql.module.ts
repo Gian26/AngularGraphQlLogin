@@ -10,6 +10,8 @@ import { HttpLinkModule, HttpLink } from "apollo-angular-link-http";
 import { setContext } from 'apollo-link-context';
 import { InMemoryCache } from "apollo-cache-inmemory";
 import {Observable} from 'rxjs/Rx';
+import { TimerObservable } from 'rxjs/observable/TimerObservable';
+import { ISubscription } from 'rxjs/Subscription';
 
 //services
 import{ AuthenticationService } from './service/auth/authentication.service';
@@ -19,15 +21,29 @@ import{ AuthenticationService } from './service/auth/authentication.service';
 })
 
 export class GraphQLModule {
+  private ticks = 0;
+  private timer$: any;
+  private $timer : ISubscription;
+  private seconds: number = 10;
+
   constructor(apollo: Apollo, httpLink: HttpLink, authentication:AuthenticationService) {
-    const http = httpLink.create({uri: "//localhost:8000/graphql/"});
-    const authMiddleware = setContext((_, { headers }) => {
+
+  const http = httpLink.create({uri: "//localhost:8000/graphql/"});
+  const authMiddleware = setContext((_, { headers }) => {
+
       // get the authentication token from local storage if it exists
       const token = localStorage.getItem('tokenApp');
       if (!token) {
         console.log("no token");
+        this.disactivate();
         return {};
       } else {
+        this.timer$ = TimerObservable.create(2000, 1000);//or you can use the constructor method
+        this.$timer = this.timer$.subscribe(t => {
+          console.log("timer ",t);
+          this.ticks = t;
+        });
+
         console.log("got token");
         return {
           headers: new HttpHeaders().set('Authorization', `JWT ${token}` || null)
@@ -46,15 +62,10 @@ export class GraphQLModule {
       link: from([authMiddleware,http])
       ,cache: new InMemoryCache()
     },'carpAdmin');
-
-    // Here we refresh the  token.
-    var a = 0;
-    Observable.interval(5*60*1000)
-      .subscribe(() => {
-        a = a + 1;
-        // do something.
-        console.log("printing"+a);
-        // or callSomeMethod();
-    });
+  }
+  private disactivate() {
+    // if (this.ticks >= this.seconds) {
+      this.$timer.unsubscribe();
+    // }
   }
 }
