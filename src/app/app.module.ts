@@ -17,20 +17,21 @@ import { RedirectLoginService } from './service/redirect/redirect-login.service'
 
 // Apollo
 import { GraphQLModule } from "./graphql.module";
+import { RegisterComponent } from '../register/register.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    DashboardComponent
+    DashboardComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     AppRouting,
     GraphQLModule,
-    FormsModule,
-
+    FormsModule
   ],
   providers: [AuthenticationService,EnsureAuthenticationService,RedirectLoginService],
   bootstrap: [AppComponent]
